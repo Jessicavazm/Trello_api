@@ -1,0 +1,3 @@
+FLASK_APP=main  # type: ignore
+FLASK_DEBUG=1
+FLASK_RUN_PORT=8080
