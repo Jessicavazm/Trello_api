@@ -1,9 +1,10 @@
 # Import OS to fetch env variables 
 import os
 # Have the core python(flask) code for app 
-# Import flask class from Flask package
+# Import flask class from Flask package 
+# Import blueprint from controllers folder
 from flask import Flask
-
+from controllers.cli_controllers import db_commands
 # Import objects from init.py and use them
 from init import db, ma, bcrypt, jwt
 
@@ -18,5 +19,8 @@ def create_app():
     ma.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+
+    # Register blueprint to use db_commands
+    app.register_blueprint(db_commands)
 
     return app
