@@ -4,7 +4,7 @@ import os
 # Import flask class from Flask package
 from flask import Flask
 
-# Import objects from init.py
+# Import objects from init.py and use them
 from init import db, ma, bcrypt, jwt
 
 # Wrap the app definition inside of a function = application factories
