@@ -5,7 +5,7 @@ from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 
-# Create objects for the classes above to use modules
+# Create objects and initialise for the classes above to use modules
 db = SQLAlchemy()
 ma = Marshmallow()
 bcrypt = Bcrypt()
