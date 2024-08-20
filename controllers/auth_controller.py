@@ -7,10 +7,14 @@ from init import bcrypt, db
 from sqlalchemy.exc import IntegrityError
 # Import error codes from psycopg
 from psycopg2 import errorcodes
+# Import create_access_token to create Token and timedelta for expire date
+from flask_jwt_extended import create_access_token
+from datetime import timedelta
 
 # Create blueprint with url_prefix
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
+# Create the Register route
 @auth_bp.route("/register", methods=["POST"])
 def register_user():
     try:    
@@ -39,4 +43,25 @@ def register_user():
         if err.orig.pgcode == errorcodes.UNIQUE_VIOLATION:
             return {"error": "Email address must be unique"}, 400
 
+
+# Create the LOGIN route
+@auth_bp.route("/login", methods=["POST"])
+def login_user():
+    # Get the data from the body of the request
+    body_data = request.get_json()
+    # Find the user in database with that email address using stmt
+    # stmt = path to fetch info 
+    stmt = db.select(User).filter_by(email=body_data["email"]) 
+    # Execute the stmt
+    user = db.session.scalar(stmt)
+    # If user exist and password is correct
+    if user and bcrypt.check_password_hash(user.password, body_data.get("password")):
+        # Create JWT
+        token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1))
+        # Send JWT back to user
+        return {"email": user.email, "is_admin": user.is_admin, "token": token}
+    # Else
+    else:
+        return {"error": "Invalid email or password"}, 400
+        # Respond back with message
 
