@@ -7,6 +7,8 @@ from flask import Flask
 from controllers.cli_controllers import db_commands
 # Import objects from init.py and use them
 from init import db, ma, bcrypt, jwt
+# Import auth_bp to register it in main.py
+from controllers.auth_controller import auth_bp
 
 # Wrap the app definition inside of a function = application factories
 def create_app():
@@ -20,7 +22,7 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    # Register blueprint to use db_commands
+    # Register blueprint to use db_commands and auth_bp
     app.register_blueprint(db_commands)
-
+    app.register_blueprint(auth_bp)
     return app
