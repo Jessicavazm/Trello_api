@@ -12,6 +12,9 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
+    # Mention relationship
+    cards = db.relationship("Card", back_populates = "user")
+
 # Create schema to serialize and deserialize data into python understandable data
 # This extends from marshmallow schema, thats why you need to import ma first
 class UserSchema(ma.Schema):
