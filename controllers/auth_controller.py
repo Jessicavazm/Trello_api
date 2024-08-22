@@ -62,6 +62,7 @@ def login_user():
         return {"email": user.email, "is_admin": user.is_admin, "token": token}
     # Else
     else:
-        return {"error": "Invalid email or password"}, 400
         # Respond back with message
+        return {"error": "Invalid email or password"}, 400
+        
 
