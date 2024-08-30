@@ -5,6 +5,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from init import db
 from models.card import Card, card_schema, cards_schema
+from models.comment import Comment
+
 
 # Create a blueprint and register it in main file.
 cards_bp = Blueprint("cards", __name__, url_prefix="/cards")

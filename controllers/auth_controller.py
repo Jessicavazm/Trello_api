@@ -1,15 +1,21 @@
+from datetime import timedelta
+
 # Import blueprint and request method to access data
 from flask import Blueprint, request
+
 # Import User to create an instance, bcrypt for hash and db to use database
 from models.user import User, user_schema
+from models.comment import Comment
 from init import bcrypt, db
+
 # Import IntegrityError
 from sqlalchemy.exc import IntegrityError
 # Import error codes from psycopg
 from psycopg2 import errorcodes
+
 # Import create_access_token to create Token and timedelta for expire date
 from flask_jwt_extended import create_access_token
-from datetime import timedelta
+
 
 # Create blueprint with url_prefix
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")

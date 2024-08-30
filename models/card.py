@@ -3,7 +3,7 @@ from init import db, ma
 # Import 'fields' to unpack complex data type = nested fields
 from marshmallow import fields
 
-# Create the Card class, it takes reference from the db.Model 
+# Create the Card model, it takes reference from the db.Model 
 class Card(db.Model):
     # Define name for the table
     __tablename__ = "cards"
@@ -24,9 +24,11 @@ class Card(db.Model):
     # Define a relationship between user and cards, to fetch more info about user
     # This value doesn't come directly from DB, SQLAlchemy fetch this information and sends it
     # db.relation(Model_name, back_populates = field)
-    # Back_populates allows User model to fetch information from Cards table.
+    # Back_populates allows User model to fetch information from Card model.
     # When you want to fetch more info than FK, you define relationship and then unpack nested fields.
+    # Use CASCADE in comments to make sure if a card is deleted, the comments are also deleted
     user = db.relationship("User", back_populates= "cards")
+    comments = db.relationship("Comment", back_populates="cards", cascade="all, delete")
 
 # Create Schemas
 # Use fields.Nested because you expect a list of items
@@ -36,9 +38,10 @@ class CardSchema(ma.Schema):
     # Use 'UserSchema' in the parameter since this schema already knows how to unpack these values
     # Use 'only' to select required fields
     user = fields.Nested("UserSchema", only=["id", "name", "email"])
+    comments = fields.List(fields.Nested("CommentSchema", exclude = ["card"]))
     
     class Meta:
-        fields = ("id", "title", "description", "status", "priority", "date", "user")
+        fields = ("id", "title", "description", "status", "priority", "date", "user", "comments")
 
 
 card_schema = CardSchema()

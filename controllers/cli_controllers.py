@@ -8,6 +8,7 @@ from init import db, bcrypt
 from models.user import User
 # Import Card to seed cards
 from models.card import Card
+from models.comment import Comment
 
 # Define an object
 db_commands = Blueprint("db", __name__)
