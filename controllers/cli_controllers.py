@@ -1,3 +1,4 @@
+# Import date to use method in the card objects
 from datetime import date
 
 # Import blueprint
@@ -5,6 +6,7 @@ from flask import Blueprint
 # Import db from init
 from init import db, bcrypt
 from models.user import User
+# Import Card to seed cards
 from models.card import Card
 
 # Define an object
@@ -34,7 +36,8 @@ def seed_tables():
 
     db.session.add_all(users)
 
-    cards = [Card(
+    cards = [
+        Card(
         title = "GitHub operations",
         description = "Perform mandatory github ops on the project",
         status = "To do",
