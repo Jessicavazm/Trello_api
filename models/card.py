@@ -36,6 +36,10 @@ class CardSchema(ma.Schema):
     # Use 'UserSchema' in the parameter since this schema already knows how to unpack these values
     # Use 'only' to select required fields
     user = fields.Nested("UserSchema", only=["id", "name", "email"])
+    
+    class Meta:
+        fields = ("id", "title", "description", "status", "priority", "date", "user")
+
 
 card_schema = CardSchema()
 cards_schema = CardSchema(many=True)
