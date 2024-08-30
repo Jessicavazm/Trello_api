@@ -64,7 +64,35 @@ def seed_tables():
 
     # Add and commit
     db.session.add_all(cards)
+
+    # Create comments, date is set in the background
+    # user_id is received by TOKEN
+    # card_it is retrieve automatically from URL
+    # Use Class name to create comments
+    comments = [
+        Comment(
+            date = date.today(),
+            user = users[0],
+            card = cards[0],
+            message = "Admin is making comment on Card 0"
+        ),
+        Comment (
+            date = date.today(),
+            user = users[0],
+            card = cards[1],
+            message = "Admin is making comment on Card 1"
+        ),
+        Comment (
+            date = date.today(),
+            user = users[1],
+            card = cards[0],
+            message = "User A is making comment on Card 0"
+        )
+    ]
+
     
+    db.session.add_all(comments)
+
     db.session.commit()
 
     print("Tables seeded!")
