@@ -19,9 +19,10 @@ class Card(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     # set relationship between user and cards
+    # This value doesn't come directly from DB, SQLAlchemy fetch this information and sends it
     user = db.relationship("User", back_populates= "cards")
 
-# Create Schemas
+# Create Schemas, use fields.Nested because you expect a list of items
 
 class CardSchema(ma.Schema):
     # Unpack 'user' variable, use Schema from User.py and set fields required
