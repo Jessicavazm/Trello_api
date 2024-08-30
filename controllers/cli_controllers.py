@@ -1,8 +1,13 @@
+# Import date to use method in the card objects
+from datetime import date
+
 # Import blueprint
 from flask import Blueprint
 # Import db from init
 from init import db, bcrypt
 from models.user import User
+# Import Card to seed cards
+from models.card import Card
 
 # Define an object
 db_commands = Blueprint("db", __name__)
@@ -29,9 +34,36 @@ def seed_tables():
         )
     ]
 
-    # Add and commit
     db.session.add_all(users)
 
+    cards = [
+        Card(
+        title = "GitHub operations",
+        description = "Perform mandatory github ops on the project",
+        status = "To do",
+        priority = "High priority",
+        date = date.today(),
+        user = users[0]
+    ), Card(
+        title = "Initialise the modules",
+        description = "Perform init operations on the necessary modules",
+        status = "On going",
+        priority = "High priority",
+        date = date.today(),
+        user = users[0]
+
+    ), Card(
+        title = "Add comments to the code",
+        description = "Add meaningful where necessary",
+        status = "To do",
+        priority = "Medium priority",
+        date = date.today(),
+        user = users[1]
+    )]
+
+    # Add and commit
+    db.session.add_all(cards)
+    
     db.session.commit()
 
     print("Tables seeded!")
