@@ -7,9 +7,15 @@ from init import db
 from models.card import Card, card_schema, cards_schema
 from models.comment import Comment
 
+# Import comments blueprint in card controller
+from controllers.comment_controller import comments_bp
 
 # Create a blueprint and register it in main file.
 cards_bp = Blueprint("cards", __name__, url_prefix="/cards")
+
+# Register 'comment' blueprint
+cards_bp.register_blueprint (comments_bp)
+
 
 # /cards - GET - fetch all cards default = ' / '
 # Default method is GET, no need to explicit
