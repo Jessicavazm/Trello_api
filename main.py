@@ -14,7 +14,9 @@ from controllers.card_controller import cards_bp
 
 # Wrap the app definition inside of a function = application factories
 def create_app():
+    # app.json. sort helps to displays fields in order
     app = Flask(__name__)
+    app.json.sort_keys = False
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
     app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
 

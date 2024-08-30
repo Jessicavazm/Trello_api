@@ -5,7 +5,7 @@ from marshmallow import fields
 # Create a new class for comments 
 class Comment(db.Model):
     # Define name of the name
-    __table__ = "comments"
+    __tablename__ = "comments"
 
     # Define the attributes
     id = db.Column(db.Integer, primary_key=True)
@@ -25,7 +25,7 @@ class Comment(db.Model):
 # Unpack user 
 class CommentSchema(ma.Schema):
     user = fields.Nested("UserSchema", only=["name", "email"])
-    card = fields.Nested("CardSchema", exclude="comments")
+    card = fields.Nested("CardSchema", exclude=["comments"])
 
     class Meta:
         fields = ["id", "message", "date", "user", "card"]

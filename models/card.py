@@ -28,7 +28,7 @@ class Card(db.Model):
     # When you want to fetch more info than FK, you define relationship and then unpack nested fields.
     # Use CASCADE in comments to make sure if a card is deleted, the comments are also deleted
     user = db.relationship("User", back_populates= "cards")
-    comments = db.relationship("Comment", back_populates="cards", cascade="all, delete")
+    comments = db.relationship("Comment", back_populates="card", cascade="all, delete")
 
 # Create Schemas
 # Use fields.Nested because you expect a list of items
@@ -42,7 +42,8 @@ class CardSchema(ma.Schema):
     
     class Meta:
         fields = ("id", "title", "description", "status", "priority", "date", "user", "comments")
-
+        # Display fields in the order
+        ordered = True
 
 card_schema = CardSchema()
 cards_schema = CardSchema(many=True)
