@@ -9,6 +9,8 @@ from models.comment import Comment
 
 # Import comments blueprint in card controller
 from controllers.comment_controller import comments_bp
+# Import utils to perform authorization
+from utils import authorise_as_admin
 
 # Create a blueprint and register it in main file.
 cards_bp = Blueprint("cards", __name__, url_prefix="/cards")
@@ -73,6 +75,13 @@ def create_card():
 @cards_bp.route("/<int:card_id>", methods=["DELETE"])
 @jwt_required()
 def delete_card(card_id):
+    # checks if user is admin or not
+    is_admin = authorise_as_admin()
+    # if not admin
+    if not is_admin:
+        # error message
+        return {"error": "User is not authorised to perform this action"}
+    
     # Fetch the card from DB
     stmt = db.select(Card).filter_by(id=card_id)
     card = db.session.scalar(stmt)
@@ -98,8 +107,15 @@ def update_card(card_id):
     # get the card from the database
     stmt = db.select(Card).filter_by(id=card_id)
     card = db.session.scalar(stmt)
+    # Define is_admin inside of the function to work
+    is_admin = authorise_as_admin()
     # if the card exists
     if card:
+        # if not the owner of the card, convert to str  
+        if not is_admin or (str(card.user_id) != get_jwt_identity()):
+            # return error message
+            return {"error": "Only the owner of the card can make changes to cards."}
+        
         # update the fields as required
         card.title = body_data.get("title") or card.title
         card.description = body_data.get("description") or card.description
@@ -113,3 +129,4 @@ def update_card(card_id):
     else:
         # return error message
         return {"error": f"Card with id {card_id} not found."}, 404
+    
