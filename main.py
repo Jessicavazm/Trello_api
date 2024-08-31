@@ -1,5 +1,8 @@
 # Import OS to fetch env variables 
 import os
+# Import Marshmallow.exceptions for validation errors
+from marshmallow.exceptions import ValidationError
+
 # Have the core python(flask) code for app 
 # Import flask class from Flask package 
 # Import blueprint from controllers folder
@@ -10,6 +13,7 @@ from init import db, ma, bcrypt, jwt
 # Import auth_bp and cards_bp to register it in main.py
 from controllers.auth_controller import auth_bp
 from controllers.card_controller import cards_bp
+
 
 
 # Wrap the app definition inside of a function = application factories
@@ -25,6 +29,12 @@ def create_app():
     ma.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+
+    # Any errors in the app occurs, app will direct to this function
+    # err handles error automatically
+    @app.errorhandler(ValidationError)
+    def validation_error(err):
+        return {"error": err.messages}, 400
 
     # Register blueprint to use db_commands, auth_bp, cards_bp
     app.register_blueprint(db_commands)
