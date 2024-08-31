@@ -49,7 +49,8 @@ def get_a_card(card_id):
 @jwt_required()
 def create_card():
     # Get the data from the body of the request
-    card_body = request.get_json()
+    # Load method deserialise and loads the validation from schemas
+    card_body = card_schema.load(request.get_json())
     # Create a new card model instance
     # user_id is a foreign key in this table
     # Get user_id from token
@@ -92,7 +93,8 @@ def delete_card(card_id):
 @jwt_required()
 def update_card(card_id):
     # get the info from the body of the request
-    body_data = request.get_json()
+    # partial=True means if you don't include title, it still works
+    body_data = card_schema.load(request.get_json(), partial=True)
     # get the card from the database
     stmt = db.select(Card).filter_by(id=card_id)
     card = db.session.scalar(stmt)

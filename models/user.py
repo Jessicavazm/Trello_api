@@ -1,6 +1,8 @@
 from init import db,ma
 # To unpack Nested fields import Fields
 from marshmallow import fields
+# Import Regexp for email validation
+from marshmallow.validate import Regexp
 
 class User(db.Model):
     # Name of the table
@@ -29,12 +31,16 @@ class UserSchema(ma.Schema):
     cards = fields.List(fields.Nested("CardSchema", exclude=["user"]))
     comments = fields.List(fields.Nested("CommentSchema", exclude=["user"]))
     
+    email = fields.String(required=True, validate=Regexp("^\S+@\S+\.\S+$", error="Invalid Email Format."))
+
     class Meta:
         fields = ("id", "name", "email", "password", "is_admin", "cards", "comments")
 
-# Create objects to handle a single user
+
+# Create objects to handle a single user object
 user_schema = UserSchema(exclude=["password"])
-# Create objects to handle a list of multiple users 
+
+# Create objects to handle a list of multiple users objects
 users_schema = UserSchema(many=True, exclude=["password"])
 
 
